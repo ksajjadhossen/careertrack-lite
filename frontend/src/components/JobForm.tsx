@@ -3,7 +3,6 @@ import React, { FormEvent } from "react";
 export default function JobForm() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // এখানে আপনার API হ্যান্ডলিং লজিক বসবে
   };
 
   return (

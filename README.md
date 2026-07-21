@@ -1,43 +1,70 @@
-# CareerTrack Lite 🚀
+# CareerTrack Lite 💼
 
-CareerTrack Lite is a full-stack job application tracking web application that helps job seekers manage, organize, and track their job search progress efficiently.
+A full-stack, responsive job application tracking system designed to help users manage, search, filter, and track their job applications securely.
 
-## ✨ Features
+---
 
-- **User Authentication:** Secure user registration and login using JWT and bcrypt.
-- **Job Application Management:** Create, view, update, and delete job applications.
-- **Search & Filter:** Search applications by company/title and filter by status or source.
-- **Sorting:** Sort applications by newest or oldest submission dates.
-- **Dashboard Overview:** Visual statistics and recently added job metrics.
-- **Dark / Light Mode:** Fully responsive UI with seamless theme toggling.
+## 🔗 Live Links & Test Credentials
 
-## 🛠️ Tech Stack
+- **Live Frontend:** [https://careertrack-app.vercel.app](https://careertrack-app.vercel.app)
+- **Live Backend API:** [https://careertrack-lite-3tkk.onrender.com](https://careertrack-lite-3tkk.onrender.com)
+- **API Health Check:** `https://careertrack-lite-3tkk.onrender.com/api/health`
 
-### Frontend
+### 🔑 Test Account Credentials
 
-- **Framework:** React with TypeScript
-- **Styling:** Tailwind CSS (v4)
-- **Icons:** Lucide React
-- **Build Tool:** Vite
+- **Email:** `demo@example.com`
+- **Password:** `12345678`
 
-### Backend
+---
 
-- **Runtime:** Node.js with Express & TypeScript
-- **Database:** PostgreSQL
-- **ORM:** Prisma v7
-- **Authentication:** JSON Web Tokens (JWT) & bcryptjs
+## 🛠️ Tech Stack & Database
 
-## 🚀 Getting Started
+- **Frontend:** React.js, TypeScript, CSS / Tailwind CSS, Axios
+- **Backend:** Node.js, Express.js, TypeScript, REST API
+- **Database:** PostgreSQL (Hosted on Neon)
+- **ORM:** Prisma ORM (v7)
+- **Authentication:** JWT (JSON Web Tokens), `bcryptjs`
+- **Deployment:** Vercel (Frontend), Render (Backend)
 
-### Prerequisites
+---
 
-- Node.js (v18 or higher)
-- PostgreSQL database instance
+## ✨ Key Features
 
-### Installation & Setup
+1. **User Authentication & Authorization**
+   - Secure user registration and login.
+   - Passwords hashed with `bcryptjs`.
+   - Protected backend and frontend routes using JWT.
+   - User ownership enforcement (users can only see, edit, and delete their own applications).
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.name.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.name.git)
-   cd careertrack-lite
-   ```
+2. **Job Application Management (CRUD)**
+   - **Create:** Add new job applications with details like company name, job title, job post URL, source, status, application date, and notes.
+   - **Read:** View a list of tracked applications or inspect a single application's details.
+   - **Update:** Edit job application statuses, dates, or notes anytime.
+   - **Delete:** Remove job applications with a safety confirmation prompt.
+
+3. **Dashboard & Analytics**
+   - Real-time statistics showing counts for: Total, Saved, Applied, Assessment, Interview, Rejected, and Offer status.
+   - Quick access to recently added job applications.
+
+4. **Search, Filter & Sort**
+   - Search applications by company name or job title.
+   - Filter applications by status or source.
+   - Sort applications by Newest or Oldest first.
+
+5. **Responsive UI & User Experience**
+   - Fully responsive across mobile, tablet, and desktop devices.
+   - Disabled submit buttons during network requests.
+   - Error and loading state indicators.
+
+---
+
+## 📂 Environment Variables Setup
+
+Create a `.env` file in the backend root directory (Refer to `.env.example`):
+
+```env
+PORT=5000
+DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
+JWT_SECRET="your_jwt_secret_key"
+CLIENT_URL="[https://careertrack-app.vercel.app](https://careertrack-app.vercel.app)"
+```

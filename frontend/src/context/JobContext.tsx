@@ -37,7 +37,7 @@ interface JobContextType {
 
 const JobContext = createContext<JobContextType | undefined>(undefined);
 
-const API_URL = "http://localhost:5000/api/applications";
+const API_URL = `https://careertrack-lite-3tkk.onrender.com/api/applications`;
 
 export const JobProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

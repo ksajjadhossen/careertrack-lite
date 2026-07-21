@@ -70,7 +70,7 @@ export default function JobForm() {
             onChange={(e) =>
               setFormData({ ...formData, jobTitle: e.target.value })
             }
-            placeholder="Enter job title"
+            placeholder="Enter job title  "
             className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500"
           />
         </div>

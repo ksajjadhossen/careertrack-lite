@@ -7,74 +7,70 @@ import React, {
   useCallback,
 } from "react";
 import type { Job, JobContextType } from "../types/job";
+import {
+  fetchJobsAPI,
+  addJobAPI,
+  updateJobAPI,
+  deleteJobAPI,
+} from "../services/api";
 
 export type { Job };
 
 const JobContext = createContext<JobContextType | undefined>(undefined);
 
-const INITIAL_JOBS: Job[] = [
-  {
-    id: "1",
-    companyName: "Google",
-    jobTitle: "Frontend Engineer",
-    jobUrl: "https://google.com/jobs",
-    source: "LinkedIn",
-    applicationDate: "2026-07-20",
-    status: "Interview",
-    notes: "HR screen completed",
-  },
-  {
-    id: "2",
-    companyName: "Netflix",
-    jobTitle: "React Developer",
-    jobUrl: "https://netflix.com/jobs",
-    source: "Company Website",
-    applicationDate: "2026-07-18",
-    status: "Applied",
-  },
-  {
-    id: "3",
-    companyName: "Meta",
-    jobTitle: "Software Engineer",
-    source: "Referral",
-    applicationDate: "2026-07-15",
-    status: "Rejected",
-  },
-];
-
 export const JobProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [jobs, setJobs] = useState<Job[]>(() => {
-    try {
-      const saved = localStorage.getItem("careertrack_jobs");
-      return saved ? JSON.parse(saved) : INITIAL_JOBS;
-    } catch (error) {
-      console.error("Failed to parse jobs from localStorage:", error);
-      return INITIAL_JOBS;
-    }
-  });
+  const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
-    localStorage.setItem("careertrack_jobs", JSON.stringify(jobs));
-  }, [jobs]);
+    let isMounted = true;
 
-  const addJob = useCallback((jobData: Omit<Job, "id">) => {
-    const newJob: Job = {
-      ...jobData,
-      id: crypto.randomUUID(),
+    fetchJobsAPI()
+      .then((data) => {
+        if (isMounted) {
+          setJobs(Array.isArray(data) ? data : data.applications || []);
+        }
+      })
+      .catch((error) => console.error("Error loading jobs:", error));
+
+    return () => {
+      isMounted = false;
     };
-    setJobs((prev) => [newJob, ...prev]);
   }, []);
 
-  const updateJob = useCallback((id: string, updatedJob: Partial<Job>) => {
-    setJobs((prev) =>
-      prev.map((job) => (job.id === id ? { ...job, ...updatedJob } : job)),
-    );
+  const addJob = useCallback(async (jobData: Omit<Job, "id">) => {
+    try {
+      const res = await addJobAPI(jobData);
+      const newJob = res.application || res;
+      setJobs((prev) => [newJob, ...prev]);
+    } catch (error) {
+      console.error("Error adding job:", error);
+    }
   }, []);
 
-  const deleteJob = useCallback((id: string) => {
-    setJobs((prev) => prev.filter((job) => job.id !== id));
+  const updateJob = useCallback(
+    async (id: string, updatedJob: Partial<Job>) => {
+      try {
+        const res = await updateJobAPI(id, updatedJob);
+        const updatedData = res.application || updatedJob;
+        setJobs((prev) =>
+          prev.map((job) => (job.id === id ? { ...job, ...updatedData } : job)),
+        );
+      } catch (error) {
+        console.error("Error updating job:", error);
+      }
+    },
+    [],
+  );
+
+  const deleteJob = useCallback(async (id: string) => {
+    try {
+      await deleteJobAPI(id);
+      setJobs((prev) => prev.filter((job) => job.id !== id));
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
   }, []);
 
   const value = useMemo(

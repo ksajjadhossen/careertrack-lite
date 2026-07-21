@@ -36,9 +36,17 @@ export default function JobList({
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {
-      const dateA = new Date(a.applicationDate).getTime();
-      const dateB = new Date(b.applicationDate).getTime();
-      return sortBy === "newest" ? dateB - dateA : dateA - dateB;
+      const jobA = a as Job & { createdAt?: string };
+      const jobB = b as Job & { createdAt?: string };
+
+      const dateA = new Date(
+        jobA.createdAt || jobA.applicationDate || 0,
+      ).getTime();
+      const dateB = new Date(
+        jobB.createdAt || jobB.applicationDate || 0,
+      ).getTime();
+
+      return sortBy === "newest" ? dateA - dateB : dateB - dateA;
     });
 
   const displayedJobs = previewOnly ? filteredJobs.slice(0, 5) : filteredJobs;

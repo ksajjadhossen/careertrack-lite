@@ -237,12 +237,19 @@ app.get(
         ];
       }
 
-      if (status) whereClause.status = status as string;
-      if (source) whereClause.source = source as string;
+      if (status && status !== "all") {
+        whereClause.status = status as string;
+      }
+      if (source && source !== "all") {
+        whereClause.source = source as string;
+      }
 
       let orderByClause: any = { createdAt: "desc" };
+
       if (sort === "oldest") {
         orderByClause = { createdAt: "asc" };
+      } else if (sort === "newest") {
+        orderByClause = { createdAt: "desc" };
       }
 
       const applications = await prisma.jobApplication.findMany({

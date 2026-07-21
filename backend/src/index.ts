@@ -15,9 +15,14 @@ const pool = new Pool({ connectionString: process.env["DATABASE_URL"] });
 const adapter = new PrismaPg(pool);
 export const prisma = new PrismaClient({ adapter });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json());
-
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretcareertrackkey123";
 
 // ==========================================
@@ -109,7 +114,8 @@ app.post(
   "/api/auth/login",
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email, password } = req.body;
+      const { password } = req.body;
+      const email = req.body.email?.toLowerCase().trim();
 
       if (!email || !password) {
         res.status(400).json({ message: "Email and password are required." });
